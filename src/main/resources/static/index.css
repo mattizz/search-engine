@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald&display=swap');
+
+body {
+    font-family: 'Oswald', sans-serif;
+    background-image: url("https://cdn.pixabay.com/photo/2016/03/26/13/09/cup-of-coffee-1280537_960_720.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content {
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+     width: 40%;
+}
+
+.search-section, .tfidf-section, .upload-file-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+    padding: 2% 0;
+}
+
+.upload-file-section {
+    flex-direction: column;
+}
+
+
+.upload-file-section h2 {
+    flex: 1;
+}
+
+button {
+    width: 100px;
+}
+
+form {
+    display: flex;
+    align-items: center;
+}

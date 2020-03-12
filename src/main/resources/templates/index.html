@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/index.css}"/>
+</head>
+<body>
+<div class="content">
+    <div class="upload-file-section">
+        <h2>Upload file section</h2>
+        <div class="single-file-section">
+            <span>Upload single file:</span>
+            <form method="POST" enctype="multipart/form-data" th:action="@{/files/single}">
+                <input type="file" name="file"> <br/><br/>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+
+        <div class="multiple-file-section">
+            <span class="single-file-section-title">Upload multiple files:</span>
+            <form method="POST" enctype="multipart/form-data" th:action="@{/files/multiple}">
+                <input type="file" name="files" multiple> <br/><br/>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <h2>Search section</h2>
+        <form method="GET" th:action="@{/keywords}">
+            <input type="text" th:name="keyword">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="tfidf-section">
+        <h2>TF-IDF for word</h2>
+        <form method="GET" th:action="@{/infos}">
+            <input type="text" th:name="keyword">
+            <button type="submit">Calculate</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
