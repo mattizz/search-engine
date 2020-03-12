@@ -58,22 +58,22 @@ public class StorageService {
         }
     }
 
-    private void valid(MultipartFile file) {
-        if (file.isEmpty()) {
+    private void valid(MultipartFile inputFile) {
+        if (inputFile.isEmpty()) {
             throw new BadFileException(EMPTY_FILE_ERROR);
         }
 
-        if (file.getOriginalFilename().contains("..")) {
-            throw new BadFileException(FILENAME_ERROR + file.getOriginalFilename());
+        if (inputFile.getOriginalFilename().contains("..")) {
+            throw new BadFileException(FILENAME_ERROR + inputFile.getOriginalFilename());
         }
 
         File[] files = ROOT.toFile().listFiles();
         if (files != null) {
             boolean isExistFileWithTheSameName = Arrays.stream(files)
-                    .anyMatch(f -> file.getOriginalFilename().equals(f.getName()));
+                    .anyMatch(existingFile -> inputFile.getOriginalFilename().equals(existingFile.getName()));
 
             if (isExistFileWithTheSameName) {
-                throw new BadFileException(DUPLICATE_FILENAME_ERROR + file.getOriginalFilename());
+                throw new BadFileException(DUPLICATE_FILENAME_ERROR + inputFile.getOriginalFilename());
             }
         }
     }

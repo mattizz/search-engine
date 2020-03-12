@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.search.engine.service.DocumentService.KEYWORD_NULL_ERROR;
 import static java.util.Objects.requireNonNull;
 
 @Service
@@ -17,14 +18,13 @@ public class SearchEngineService {
     public static final String SPECIAL_CHARS = "[-+.^:,?!]";
     public static final String TEXT_NULL_MESSAGE = "Text can'be null";
     public static final String FILENAME_NULL_MESSAGE = "Filename can't be null";
-    public static final String WORD_NULL_MESSAGE = "Word can't be null";
 
     private final Map<String, Posting> wordsDictionary = new TreeMap<>();
     private int numberOfProcessedDocument = 0;
 
     public void createInvertedIndexStructure(String text, String documentName) {
         requireNonNull(text, TEXT_NULL_MESSAGE);
-        requireNonNull(text, FILENAME_NULL_MESSAGE);
+        requireNonNull(documentName, FILENAME_NULL_MESSAGE);
 
         List<String> wordsInDocument = getTransformedListWithWords(text);
 
@@ -88,20 +88,30 @@ public class SearchEngineService {
         wordsDictionary.put(word, posting);
     }
 
-    public Set<String> getDocumentsContaining(String keyword) {
-        requireNonNull(keyword, WORD_NULL_MESSAGE);
+    public List<String> getDocumentsContaining(String keyword) {
+        requireNonNull(keyword, KEYWORD_NULL_ERROR);
 
         String searchWord = keyword.toLowerCase().trim();
-        return wordsDictionary.containsKey(searchWord) ? getDocumentsFor(searchWord) : Collections.emptySet();
+        return wordsDictionary.containsKey(searchWord) ? getDocumentsFor(searchWord) : Collections.emptyList();
     }
 
-    private Set<String> getDocumentsFor(String searchWord) {
-        Posting posting = wordsDictionary.get(searchWord);
-        return posting.getDocuments().keySet();
+    private List<String> getDocumentsFor(String searchWord) {
+        Map<String, Double> documentsForSearchWord = calculateTFIDF(searchWord);
+        return getSortedListByTFIDF(documentsForSearchWord);
+    }
+
+    private List<String> getSortedListByTFIDF(Map<String, Double> documentsForSearchWord) {
+        Map<String, Double> sortedMapByTFIDF = new LinkedHashMap<>();
+
+        documentsForSearchWord.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEachOrdered(element -> sortedMapByTFIDF.put(element.getKey(), element.getValue()));
+
+        return new ArrayList<>(sortedMapByTFIDF.keySet());
     }
 
     public Map<String, Double> calculateTFIDFValuesFor(String keyword) {
-        requireNonNull(keyword, WORD_NULL_MESSAGE);
+        requireNonNull(keyword, KEYWORD_NULL_ERROR);
 
         String searchKeyword = keyword.toLowerCase();
         return wordsDictionary.containsKey(searchKeyword) ? calculateTFIDF(searchKeyword) : Collections.emptyMap();
