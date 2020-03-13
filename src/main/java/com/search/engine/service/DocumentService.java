@@ -8,8 +8,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.search.engine.exception.BadFileException.FILE_NULL_ERROR;
@@ -31,7 +31,7 @@ public class DocumentService {
         this.searchEngineService = searchEngineService;
     }
 
-    public Set<String> findDocumentsContaining(String keyword) {
+    public List<String> findDocumentsContaining(String keyword) {
         valid(keyword);
 
         return searchEngineService.getDocumentsContaining(keyword);
@@ -67,7 +67,7 @@ public class DocumentService {
     }
 
     public Map<String, Double> getTFIDF(String keyword) {
-        requireNonNull(keyword, KEYWORD_NULL_ERROR);
+        valid(keyword);
 
         return searchEngineService.calculateTFIDFValuesFor(keyword);
     }
