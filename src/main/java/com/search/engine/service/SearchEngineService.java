@@ -26,7 +26,7 @@ public class SearchEngineService {
         requireNonNull(text, TEXT_NULL_MESSAGE);
         requireNonNull(documentName, FILENAME_NULL_MESSAGE);
 
-        List<String> wordsInDocument = getTransformedListWithWords(text);
+        List<String> wordsInDocument = getListWithProcessedWords(text);
 
         for (String word : wordsInDocument) {
             if (wordsDictionary.containsKey(word)) {
@@ -39,7 +39,7 @@ public class SearchEngineService {
         numberOfProcessedDocument++;
     }
 
-    private List<String> getTransformedListWithWords(String text) {
+    private List<String> getListWithProcessedWords(String text) {
         String textWithoutSpecialChars = text.replaceAll(SPECIAL_CHARS, EMPTY_STRING);
         String[] textAfterSplit = textWithoutSpecialChars.split(SPACE_SEPARATOR);
 
